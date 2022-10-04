@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "diffalarm"
+version = "0.1.1"
+description = "alarms when web page has diff"
+authors = ["scarf <greenscarf005@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/scarf005/diffalarm"
+repository = "https://github.com/scarf005/diffalarm"
+include = ["LICENSE"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+beepy = "^1.0.7"
+requests = "^2.28.1"
+bs4 = "^0.0.1"
+docopt = "^0.6.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.8.0"
+tox = "^3.26.0"
+
+[tool.poetry.scripts]
+diffalarm = 'diffalarm:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

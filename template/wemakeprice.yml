@@ -1,0 +1,7 @@
+url: https://front.wemakeprice.com/product/2271619617?allowView=Y' # 찾을 URL
+
+selector: .total_purchase > strong # 찾을 CSS 선택자
+regex: \d+ # 찾은 값에 적용할 정규식
+
+criteria: 40000
+interval: 1 # 1초마다 갱신, 기본값: 1
