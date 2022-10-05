@@ -1,35 +1,33 @@
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Text } from '@mantine/core'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getURL } from './hook'
+import { AppShell, SimpleGrid, Text } from '@mantine/core'
+
 import axios from 'axios'
+import { Form } from './Form'
+import { UpperHeader } from './UpperHeader'
 const queryClient = new QueryClient()
+import { wemake } from './test/wemake'
 
 axios.defaults.withCredentials = true
 
-const Main = () => {
-  const { data } = useQuery(
-    ['data'],
-    async () =>
-      // await axios.get('http://127.0.0.7:8000/', {
-      //   headers: { 'Access-Control-Allow-Origin': '*' },
-      // })
-      await axios.post('http://127.0.0.7:8000', {
-        data: { url: 'https://www.example.com' },
-        Headers: {},
-      })
-  )
+// wemake is a html string; convert it to dom node
+const html2dom = (html: string) => {
+  const parser = new DOMParser()
+  return parser.parseFromString(html, 'text/html')
+}
+const wemakeDom = html2dom(wemake)
 
+const Main = () => {
   return (
-    <div className="App">
-      <h1>SiteDiff</h1>
-      <div className="card">
-        <button onClick={() => {}}>Send a request to the backend!</button>
-      </div>
-      <Text>{`${data}`}</Text>
-    </div>
+    <AppShell header={<UpperHeader />}>
+      <SimpleGrid cols={2}>
+        <Form />
+        <Text>{`${wemakeDom.querySelector('.total_purchase > strong')?.textContent}`}</Text>
+      </SimpleGrid>
+    </AppShell>
   )
 }
 
