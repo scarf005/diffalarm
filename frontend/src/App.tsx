@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getURL } from './hook'
-import { AppShell, SimpleGrid, Text } from '@mantine/core'
-
-import axios from 'axios'
+import {
+  AppShell,
+  Button,
+  Chip,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
 import { Form } from './Form'
 import { UpperHeader } from './UpperHeader'
-const queryClient = new QueryClient()
 import { wemake } from './test/wemake'
+import { beep } from './beep'
 
-axios.defaults.withCredentials = true
+const queryClient = new QueryClient()
 
 // wemake is a html string; convert it to dom node
 const html2dom = (html: string) => {
@@ -20,12 +25,30 @@ const html2dom = (html: string) => {
 }
 const wemakeDom = html2dom(wemake)
 
-const Main = () => {
+const Search = () => {
+  return (
+    <Stack>
+      <Title size="h2">검색 결과</Title>
+      <Title size="h4">선택한 HTML 요소</Title>
+      <Text>{`${
+        wemakeDom.querySelector('.total_purchase > strong')?.textContent
+      }`}</Text>
+      <Title size="h4">추출한 값</Title>
+      <Text>75142</Text>
+      <Title size="h4">현재 조건과의 비교</Title>
+      <Text>{'75142 < 80000'}</Text>
+      <Text>조건 미충족</Text>
+      <Button onClick={() => beep()}>소리 울리기</Button>
+    </Stack>
+  )
+}
+
+const Shell = () => {
   return (
     <AppShell header={<UpperHeader />}>
       <SimpleGrid cols={2}>
         <Form />
-        <Text>{`${wemakeDom.querySelector('.total_purchase > strong')?.textContent}`}</Text>
+        <Search />
       </SimpleGrid>
     </AppShell>
   )
@@ -35,7 +58,7 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={true} />
-      <Main />
+      <Shell />
     </QueryClientProvider>
   )
 }
