@@ -26,19 +26,31 @@ const html2dom = (html: string) => {
 }
 const wemakeDom = html2dom(wemake)
 
-const doAxios = () =>
-  axios.post('http://localhost:8000/api/query', {
-    data: {
-      url: 'http://www.example.com',
-    },
+axios.defaults.withCredentials = true
+axios.defaults.headers.common = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-cache',
+  Pragma: 'no-cache',
+  Expires: '0',
+}
+
+const doAxios = async () => {
+  const { data } = await axios.post('http://localhost:8000/api/query', {
+    url: 'http://www.example.com',
   })
+  return data
+}
 
 const doFetch = () =>
   fetch('http://localhost:8000/api/query', {
     method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
     },
+    redirect: 'follow',
     body: JSON.stringify({
       url: 'http://www.example.com',
     }),
@@ -61,14 +73,8 @@ const Search = () => {
       <Text>{'75142 < 80000'}</Text>
       <Text>조건 미충족</Text>
       <Button onClick={() => beep()}>소리 울리기</Button>
-      <Button
-        onClick={() => {
-          doFetch()
-          // doAxios()
-        }}
-      >
-        API!
-      </Button>
+      <Button onClick={() => doFetch()}>fetch</Button>
+      <Button onClick={() => doAxios()}>axios</Button>
     </Stack>
   )
 }
