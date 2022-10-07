@@ -15,6 +15,7 @@ import { Form } from './Form'
 import { UpperHeader } from './UpperHeader'
 import { wemake } from './test/wemake'
 import { beep } from './beep'
+import axios from 'axios'
 
 const queryClient = new QueryClient()
 
@@ -24,6 +25,27 @@ const html2dom = (html: string) => {
   return parser.parseFromString(html, 'text/html')
 }
 const wemakeDom = html2dom(wemake)
+
+const doAxios = () =>
+  axios.post('http://localhost:8000/api/query', {
+    data: {
+      url: 'http://www.example.com',
+    },
+  })
+
+const doFetch = () =>
+  fetch('http://localhost:8000/api/query', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      url: 'http://www.example.com',
+    }),
+  })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err))
 
 const Search = () => {
   return (
@@ -39,6 +61,14 @@ const Search = () => {
       <Text>{'75142 < 80000'}</Text>
       <Text>조건 미충족</Text>
       <Button onClick={() => beep()}>소리 울리기</Button>
+      <Button
+        onClick={() => {
+          doFetch()
+          // doAxios()
+        }}
+      >
+        API!
+      </Button>
     </Stack>
   )
 }

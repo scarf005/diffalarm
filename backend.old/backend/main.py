@@ -24,8 +24,7 @@ app = FastAPI(docs_url="/", on_startup=[on_start_up], on_shutdown=[on_shutdown])
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://www.localhost:5173"],
-    allow_credentials=True,
+    allow_origins=["http://localhost:5173"],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
@@ -48,24 +47,24 @@ async def resolve_query(text: str, selector: str) -> SessionResponse:  # type: i
             return {"status": "error", "message": "No element found"}
 
 
-@app.post("/query")
+@app.get("/")
+async def root():
+    return "Hello World"
+
+
+@app.post("/api/query")
 async def query(query: Query):
     return await session.get(query.url)
 
 
-# @app.get("/query/element")
-# async def query_element(query: QueryElement):
-#     response = await session.get(query.url)
-#     match response["status"]:
-#         case "error":
-#             return response
-#         case "ok":
-#             return await resolve_query(response["message"], query.selector)
-
-
-@app.get("/")
-async def root():
-    return "Hello World"
+@app.post("/api/query/element")
+async def query_element(query: QueryElement):
+    response = await session.get(query.url)
+    match response["status"]:
+        case "error":
+            return response
+        case "ok":
+            return await resolve_query(response["message"], query.selector)
 
 
 @app.exception_handler(RequestValidationError)  # type: ignore

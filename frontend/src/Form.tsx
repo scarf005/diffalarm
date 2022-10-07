@@ -42,7 +42,7 @@ export const Form = () => {
     <form onSubmit={form.onSubmit(setValue)}>
       <Title size="h2">조건</Title>
       <TextInput
-        placeholder="https://www.example.com"
+        placeholder="www.example.com"
         label="찾을 웹 페이지"
         withAsterisk
         {...form.getInputProps('url')}
