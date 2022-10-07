@@ -19,14 +19,12 @@ import axios from 'axios'
 
 const queryClient = new QueryClient()
 
-// wemake is a html string; convert it to dom node
 const html2dom = (html: string) => {
   const parser = new DOMParser()
   return parser.parseFromString(html, 'text/html')
 }
 const wemakeDom = html2dom(wemake)
 
-axios.defaults.withCredentials = true
 axios.defaults.headers.common = {
   'Content-Type': 'application/json',
   'Cache-Control': 'no-cache',
