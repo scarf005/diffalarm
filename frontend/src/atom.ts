@@ -32,14 +32,17 @@ export const pageAtom = atomWithQuery(get => {
 export const domAtom = atom(get => {
   const parser = new DOMParser()
   const { message } = get(pageAtom)
-  return parser.parseFromString(message, 'text/html')
+  return parser.parseFromString(message, 'text/html').querySelector('body')
 })
+
+// DOM string representation
+export const domTextAtom = atom(get => get(domAtom)?.outerHTML)
 
 export const selectAtom = atom(get => {
   const dom = get(domAtom)
   const { selector } = get(formAtom)
   try {
-    return dom.querySelector(selector)?.textContent
+    return dom?.querySelector(selector)?.textContent
   } catch {
     return ''
   }

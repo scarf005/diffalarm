@@ -1,18 +1,7 @@
-import {
-  TextInput,
-  Button,
-  Select,
-  Title,
-  Divider,
-  Group,
-  SimpleGrid,
-  Code,
-} from '@mantine/core'
-import { createFormContext, useForm } from '@mantine/form'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { Suspense, useEffect } from 'react'
-import { Text } from '@mantine/core'
-import { formAtom, FormValues, pageAtom, urlAtom } from './atom'
+import { TextInput, Button, Title, Divider } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import { useAtom } from 'jotai'
+import { formAtom, FormValues } from './atom'
 
 // type extractType = 'number'
 export type compareType = '>' | '>=' | '==' | '<=' | '<'
@@ -52,17 +41,6 @@ export const Form = () => {
       />
       <Divider my="md" />
       <Button type="submit">선택 조건으로 찾기</Button>
-      <PageData />
     </form>
-  )
-}
-
-export const PageData = () => {
-  const data = useAtomValue(pageAtom)
-
-  return (
-    <Suspense fallback={<div>로딩중...</div>}>
-      {data && <Code block>{data.message}</Code>}
-    </Suspense>
   )
 }

@@ -12,6 +12,7 @@ import {
   Title,
 } from '@mantine/core'
 import { Form } from './Form'
+import { PageData } from './PageData'
 import { UpperHeader } from './UpperHeader'
 import { wemake } from './test/wemake'
 import { beep } from './beep'
@@ -24,8 +25,6 @@ import { domAtom, formAtom, pageAtom, selectAtom } from './atom'
 //   return parser.parseFromString(html, 'text/html')
 // }
 // const dom = html2dom(wemake)
-
-
 
 const Search = () => {
   const selected = useAtomValue(selectAtom)
@@ -48,8 +47,9 @@ const Search = () => {
 const Shell = () => {
   return (
     <AppShell header={<UpperHeader />}>
-      <SimpleGrid cols={2}>
+      <SimpleGrid cols={3}>
         <Form />
+        <PageData />
         <Search />
       </SimpleGrid>
     </AppShell>
