@@ -15,47 +15,14 @@ import { Form } from './Form'
 import { UpperHeader } from './UpperHeader'
 import { wemake } from './test/wemake'
 import { beep } from './beep'
-import axios from 'axios'
-
-const queryClient = new QueryClient()
+import { Provider } from 'jotai'
+import { queryClientAtom } from 'jotai/query'
 
 const html2dom = (html: string) => {
   const parser = new DOMParser()
   return parser.parseFromString(html, 'text/html')
 }
 const wemakeDom = html2dom(wemake)
-
-axios.defaults.headers.common = {
-  'Content-Type': 'application/json',
-  'Cache-Control': 'no-cache',
-  Pragma: 'no-cache',
-  Expires: '0',
-}
-
-const doAxios = async () => {
-  const { data } = await axios.post('http://localhost:8000/api/query', {
-    url: 'http://www.example.com',
-  })
-  return data
-}
-
-const doFetch = () =>
-  fetch('http://localhost:8000/api/query', {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    body: JSON.stringify({
-      url: 'http://www.example.com',
-    }),
-  })
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .catch(err => console.log(err))
 
 const Search = () => {
   return (
@@ -71,8 +38,6 @@ const Search = () => {
       <Text>{'75142 < 80000'}</Text>
       <Text>조건 미충족</Text>
       <Button onClick={() => beep()}>소리 울리기</Button>
-      <Button onClick={() => doFetch()}>fetch</Button>
-      <Button onClick={() => doAxios()}>axios</Button>
     </Stack>
   )
 }
@@ -88,11 +53,14 @@ const Shell = () => {
   )
 }
 
+const queryClient = new QueryClient()
 export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={true} />
-      <Shell />
+      <Provider initialValues={[[queryClientAtom, queryClient]]}>
+        <Shell />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </Provider>
     </QueryClientProvider>
   )
 }

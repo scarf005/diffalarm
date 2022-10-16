@@ -9,28 +9,21 @@ import {
   Code,
 } from '@mantine/core'
 import { createFormContext, useForm } from '@mantine/form'
-import { atom, useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { Suspense, useEffect } from 'react'
+import { Text } from '@mantine/core'
+import { formAtom, FormValues, pageAtom, urlAtom } from './atom'
 
 // type extractType = 'number'
 export type compareType = '>' | '>=' | '==' | '<=' | '<'
 
-interface FormValues {
-  url: string
-  // selector: string
-  // extract: extractType
-  // criteria: number
-}
-
-const formAtom = atom<FormValues>({
-  url: '',
-})
-
-// const [FormProvider, useFormContext, useForm] = createFormContext<FormValues>()
-
 export const Form = () => {
   const [value, setValue] = useAtom(formAtom)
   const form = useForm<FormValues>({
+    initialValues: {
+      url: '',
+      selector: ''
+    },
     validate: {
       url: v => {
         if (!v) return 'URL이 비어있습니다'
@@ -39,33 +32,32 @@ export const Form = () => {
   })
 
   return (
-    <form onSubmit={form.onSubmit(setValue)}>
+    <form
+      onSubmit={form.onSubmit(value => {
+        setValue(value)
+      })}
+    >
       <Title size="h2">조건</Title>
       <TextInput
-        placeholder="www.example.com"
-        label="찾을 웹 페이지"
         withAsterisk
+        label="찾을 웹 페이지"
+        placeholder="www.example.com"
         {...form.getInputProps('url')}
       />
-      {/* <TextInput placeholder="" label="CSS 선택자" />
-      <SimpleGrid cols={3}>
-        <TextInput placeholder="100" label="비교값 예시" disabled />
-        <Select
-          label="비교 방식"
-          defaultValue={'>='}
-          data={[
-            { value: '>', label: '>' },
-            { value: '>=', label: '>=' },
-            { value: '==', label: '=' },
-            { value: '<=', label: '<=' },
-            { value: '>', label: '<' },
-          ]}
-        />
-        <TextInput placeholder="0" label="검사 조건" />
-      </SimpleGrid> */}
       <Divider my="md" />
       <Button type="submit">선택 조건으로 찾기</Button>
-      <Code block>{JSON.stringify(value, null, 2)}</Code>
+      <PageData />
+      {/* <Code block>{JSON.stringify(value, null, 2)}</Code> */}
     </form>
+  )
+}
+
+export const PageData = () => {
+  const data = useAtomValue(pageAtom)
+
+  return (
+    <Suspense fallback={<div>로딩중...</div>}>
+      {data && <Code block>{data.message}</Code>}
+    </Suspense>
   )
 }
