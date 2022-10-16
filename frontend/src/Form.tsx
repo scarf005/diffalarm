@@ -22,7 +22,7 @@ export const Form = () => {
   const form = useForm<FormValues>({
     initialValues: {
       url: '',
-      selector: ''
+      selector: '',
     },
     validate: {
       url: v => {
@@ -44,10 +44,15 @@ export const Form = () => {
         placeholder="www.example.com"
         {...form.getInputProps('url')}
       />
+      <TextInput
+        withAsterisk
+        label="CSS 선택자"
+        placeholder="div"
+        {...form.getInputProps('selector')}
+      />
       <Divider my="md" />
       <Button type="submit">선택 조건으로 찾기</Button>
       <PageData />
-      {/* <Code block>{JSON.stringify(value, null, 2)}</Code> */}
     </form>
   )
 }

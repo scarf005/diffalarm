@@ -15,7 +15,7 @@ export interface FormValues {
 }
 export const formAtom = atom<FormValues>({
   url: 'https://www.example.com',
-  selector: '',
+  selector: 'div',
 })
 
 export const pageAtom = atomWithQuery(get => {
@@ -26,5 +26,21 @@ export const pageAtom = atomWithQuery(get => {
       const { data } = await axios.post<QueryResult>(API_URL, { url })
       return data
     },
+  }
+})
+
+export const domAtom = atom(get => {
+  const parser = new DOMParser()
+  const { message } = get(pageAtom)
+  return parser.parseFromString(message, 'text/html')
+})
+
+export const selectAtom = atom(get => {
+  const dom = get(domAtom)
+  const { selector } = get(formAtom)
+  try {
+    return dom.querySelector(selector)?.textContent
+  } catch {
+    return ''
   }
 })

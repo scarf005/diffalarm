@@ -15,27 +15,30 @@ import { Form } from './Form'
 import { UpperHeader } from './UpperHeader'
 import { wemake } from './test/wemake'
 import { beep } from './beep'
-import { Provider } from 'jotai'
+import { Provider, useAtomValue } from 'jotai'
 import { queryClientAtom } from 'jotai/query'
+import { domAtom, formAtom, pageAtom, selectAtom } from './atom'
 
-const html2dom = (html: string) => {
-  const parser = new DOMParser()
-  return parser.parseFromString(html, 'text/html')
-}
-const wemakeDom = html2dom(wemake)
+// const html2dom = (html: string) => {
+//   const parser = new DOMParser()
+//   return parser.parseFromString(html, 'text/html')
+// }
+// const dom = html2dom(wemake)
+
+
 
 const Search = () => {
+  const selected = useAtomValue(selectAtom)
+
   return (
     <Stack>
       <Title size="h2">검색 결과</Title>
       <Title size="h4">선택한 HTML 요소</Title>
-      <Text>{`${
-        wemakeDom.querySelector('.total_purchase > strong')?.textContent
-      }`}</Text>
+      <Text>{selected}</Text>
       <Title size="h4">추출한 값</Title>
-      <Text>75142</Text>
+      <Text>{selected}</Text>
       <Title size="h4">현재 조건과의 비교</Title>
-      <Text>{'75142 < 80000'}</Text>
+      <Text>{`${selected} < 80000`}</Text>
       <Text>조건 미충족</Text>
       <Button onClick={() => beep()}>소리 울리기</Button>
     </Stack>
