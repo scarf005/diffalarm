@@ -1,56 +1,25 @@
-import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import {
-  AppShell,
-  Button,
-  Chip,
-  Group,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core'
-import { Form } from './Form'
+import { AppShell, SimpleGrid, Stack } from '@mantine/core'
+import { URLForm } from './Form'
 import { PageData } from './PageData'
 import { UpperHeader } from './UpperHeader'
-import { wemake } from './test/wemake'
-import { beep } from './beep'
-import { Provider, useAtomValue } from 'jotai'
+import { Provider } from 'jotai'
 import { queryClientAtom } from 'jotai/query'
-import { domAtom, formAtom, pageAtom, selectAtom } from './atom'
-
-// const html2dom = (html: string) => {
-//   const parser = new DOMParser()
-//   return parser.parseFromString(html, 'text/html')
-// }
-// const dom = html2dom(wemake)
-
-const Search = () => {
-  const selected = useAtomValue(selectAtom)
-
-  return (
-    <Stack>
-      <Title size="h2">검색 결과</Title>
-      <Title size="h4">선택한 HTML 요소</Title>
-      <Text>{selected}</Text>
-      <Title size="h4">추출한 값</Title>
-      <Text>{selected}</Text>
-      <Title size="h4">현재 조건과의 비교</Title>
-      <Text>{`${selected} < 80000`}</Text>
-      <Text>조건 미충족</Text>
-      <Button onClick={() => beep()}>소리 울리기</Button>
-    </Stack>
-  )
-}
+import { Selector, Search } from './Search'
 
 const Shell = () => {
   return (
     <AppShell header={<UpperHeader />}>
-      <SimpleGrid cols={3}>
-        <Form />
-        <PageData />
-        <Search />
+      <SimpleGrid cols={2}>
+        <Stack>
+          <URLForm />
+          <PageData />
+        </Stack>
+        <Stack>
+          <Selector />
+          <Search />
+        </Stack>
       </SimpleGrid>
     </AppShell>
   )

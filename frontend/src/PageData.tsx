@@ -6,6 +6,7 @@ import { domTextAtom, pageAtom } from './atom'
 
 export const PageData = () => {
   const data = useAtomValue(domTextAtom)
+  console.debug(data)
 
   return (
     <Suspense fallback={<div>로딩중...</div>}>

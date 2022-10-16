@@ -9,17 +9,11 @@ interface QueryResult {
   message: string
 }
 
-export interface FormValues {
-  url: string
-  selector: string
-}
-export const formAtom = atom<FormValues>({
-  url: 'https://www.example.com',
-  selector: 'div',
-})
+export const urlAtom = atom('https://www.example.com')
+export const selectorAtom = atom('div')
 
 export const pageAtom = atomWithQuery(get => {
-  const url = get(formAtom).url
+  const url = get(urlAtom)
   return {
     queryKey: ['url', url],
     queryFn: async ({ queryKey: [, url] }) => {
@@ -38,9 +32,9 @@ export const domAtom = atom(get => {
 // DOM string representation
 export const domTextAtom = atom(get => get(domAtom)?.outerHTML)
 
-export const selectAtom = atom(get => {
+export const selectedTextAtom = atom(get => {
   const dom = get(domAtom)
-  const { selector } = get(formAtom)
+  const selector = get(selectorAtom)
   try {
     return dom?.querySelector(selector)?.textContent
   } catch {
